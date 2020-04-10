@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// @ts-nocheck
 var commonFunction_1 = require("./commonFunction");
 var commonClass_1 = require("../model/commonClass");
 /**
@@ -199,7 +200,7 @@ function dataController(app) {
     app.get('/api/sysmessage/:id', function (req, res) {
         // console.log(req.params.id);
         // res.send('666666');
-        res.json(systemdatil.find(function (systemdatil) { return systemdatil.id == req.params.id; }));
+        res.json(systemdatil.find(function (item) { return item.id == req.params.id; }));
     });
     /*用来模拟用户是否对消息进行标记成功*/
     app.get('/api/sysmeswrite/:id', function (req, res) {
@@ -221,7 +222,7 @@ function dataController(app) {
     app.get('/api/accountdata', function (req, res) {
         if (req.query.area) {
             // console.log(req.query.area);
-            res.json(sysaccount.find(function (sysaccount) { return sysaccount.area == req.query.area; }));
+            res.json(sysaccount.find(function (item) { return item.area == req.query.area; }));
         }
         else {
             console.log('ddd');

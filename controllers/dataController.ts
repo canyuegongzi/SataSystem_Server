@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {makeArr, Makedata, trueFalse} from './commonFunction';
 import {SysDetail, SysWriteData} from "../model/commonClass";
 
@@ -201,7 +202,7 @@ export function dataController(app) {
     app.get('/api/sysmessage/:id', (req, res) => {
         // console.log(req.params.id);
         // res.send('666666');
-        res.json(systemdatil.find((systemdatil) => systemdatil.id == req.params.id));
+        res.json(systemdatil.find((item) => item.id == req.params.id));
     });
     /*用来模拟用户是否对消息进行标记成功*/
     app.get('/api/sysmeswrite/:id', (req, res) => {
@@ -223,7 +224,7 @@ export function dataController(app) {
     app.get('/api/accountdata', (req, res) => {
         if (req.query.area) {
             // console.log(req.query.area);
-            res.json(sysaccount.find((sysaccount) => sysaccount.area == req.query.area));
+            res.json(sysaccount.find((item) => item.area == req.query.area));
         } else {
             console.log('ddd');
         }

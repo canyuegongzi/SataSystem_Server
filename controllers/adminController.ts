@@ -80,59 +80,52 @@ export function adminController(app) {
         });
     })
     app.post('/api/register', (req, res) =>  {
-        //console.log(req.session.message);
+        console.log(req.session.message);
         const params = JSON.parse(JSON.stringify(req.body)).params;
+        console.log(params)
         const ip = getClientIp(req);
-        if (req.session.message /*message*/) {
-            if (Number(params.message) == Number(message)) {
-                AdminUserModel.find({'phoneNumber': params.phone}, (err, docs) => {
-                    let id = makeDiffId();
-                    if (!err) {
-                        if (docs.length == 0) {
-
-                            AdminUserModel.create({
+        AdminUserModel.find({'phoneNumber': params.phone}, (err, docs) => {
+            let id = makeDiffId();
+            if (!err) {
+                if (docs.length == 0) {
+                    AdminUserModel.create({
+                        name: params.phone,
+                        password: params.password,
+                        phoneNumber: params.phone,
+                        id: id
+                    }, (err, docs) => {
+                        if (!err) {
+                            UserDetailModel.create({
                                 name: params.phone,
-                                password: params.password,
-                                phoneNumber: params.phone,
+                                date: new Date().toLocaleDateString(),
+                                phone: params.phone,
                                 id: id
                             }, (err, docs) => {
                                 if (!err) {
-                                    UserDetailModel.create({
+                                    this.log = {ip: ip, desc: '注册成功', date: new Date};
+                                    AdminLogModel.create({
                                         name: params.phone,
-                                        date: new Date().toLocaleDateString(),
-                                        phone: params.phone,
+                                        phoneNumber: params.phone,
+                                        date: new Date(),
+                                        log: [this.log],
                                         id: id
                                     }, (err, docs) => {
-                                        if (!err) {
-                                            this.log = {ip: ip, desc: '注册成功', date: new Date};
-                                            AdminLogModel.create({
-                                                name: params.phone,
-                                                phoneNumber: params.phone,
-                                                date: new Date(),
-                                                log: [this.log],
-                                                id: id
-                                            }, (err, docs) => {
-                                                //commonFunction.insertData(this.log, AdminLogModel, this.admin.phoneNumber);
-                                                return res.json({
-                                                    status: true,
-                                                    date: new Date(),
-                                                    message: 'succcess',
-                                                    ip: ip
-                                                });
-                                            });
-                                        }
+                                        return res.json({
+                                            status: true,
+                                            date: new Date(),
+                                            message: 'succcess',
+                                            ip: ip
+                                        });
                                     });
                                 }
                             });
-                        } else if (docs.length != 0) {
-                            return res.json({status: false, date: new Date(), message: 'hasuser', ip: ip});
                         }
-                    }
-                })
+                    });
+                } else if (docs.length != 0) {
+                    return res.json({status: false, date: new Date(), message: 'hasuser', ip: ip});
+                }
             }
-        } else {
-            return res.json({status: false, date: new Date(), message: 'messageerror', ip: ip});
-        }
+        })
 
 
     });

@@ -83,60 +83,53 @@ function adminController(app) {
         });
     });
     app.post('/api/register', function (req, res) {
-        //console.log(req.session.message);
+        console.log(req.session.message);
         var params = JSON.parse(JSON.stringify(req.body)).params;
+        console.log(params);
         var ip = commonFunction_1.getClientIp(req);
-        if (req.session.message /*message*/) {
-            if (Number(params.message) == Number(message)) {
-                AdminUserModel.find({ 'phoneNumber': params.phone }, function (err, docs) {
-                    var id = commonFunction_1.makeDiffId();
-                    if (!err) {
-                        if (docs.length == 0) {
-                            AdminUserModel.create({
+        AdminUserModel.find({ 'phoneNumber': params.phone }, function (err, docs) {
+            var id = commonFunction_1.makeDiffId();
+            if (!err) {
+                if (docs.length == 0) {
+                    AdminUserModel.create({
+                        name: params.phone,
+                        password: params.password,
+                        phoneNumber: params.phone,
+                        id: id
+                    }, function (err, docs) {
+                        if (!err) {
+                            UserDetailModel.create({
                                 name: params.phone,
-                                password: params.password,
-                                phoneNumber: params.phone,
+                                date: new Date().toLocaleDateString(),
+                                phone: params.phone,
                                 id: id
                             }, function (err, docs) {
                                 if (!err) {
-                                    UserDetailModel.create({
+                                    _this.log = { ip: ip, desc: '注册成功', date: new Date };
+                                    AdminLogModel.create({
                                         name: params.phone,
-                                        date: new Date().toLocaleDateString(),
-                                        phone: params.phone,
+                                        phoneNumber: params.phone,
+                                        date: new Date(),
+                                        log: [_this.log],
                                         id: id
                                     }, function (err, docs) {
-                                        if (!err) {
-                                            _this.log = { ip: ip, desc: '注册成功', date: new Date };
-                                            AdminLogModel.create({
-                                                name: params.phone,
-                                                phoneNumber: params.phone,
-                                                date: new Date(),
-                                                log: [_this.log],
-                                                id: id
-                                            }, function (err, docs) {
-                                                //commonFunction.insertData(this.log, AdminLogModel, this.admin.phoneNumber);
-                                                return res.json({
-                                                    status: true,
-                                                    date: new Date(),
-                                                    message: 'succcess',
-                                                    ip: ip
-                                                });
-                                            });
-                                        }
+                                        return res.json({
+                                            status: true,
+                                            date: new Date(),
+                                            message: 'succcess',
+                                            ip: ip
+                                        });
                                     });
                                 }
                             });
                         }
-                        else if (docs.length != 0) {
-                            return res.json({ status: false, date: new Date(), message: 'hasuser', ip: ip });
-                        }
-                    }
-                });
+                    });
+                }
+                else if (docs.length != 0) {
+                    return res.json({ status: false, date: new Date(), message: 'hasuser', ip: ip });
+                }
             }
-        }
-        else {
-            return res.json({ status: false, date: new Date(), message: 'messageerror', ip: ip });
-        }
+        });
     });
     app.post('/api/regnumber', function (req, res) {
         var params = JSON.parse(JSON.stringify(req.body)).params;
@@ -280,7 +273,7 @@ function adminController(app) {
         UserDetailModel.count({ 'root': { $gt: 0 } }, function (err, count) {
             if (!err) {
                 if (req.query.page) {
-                    UserDetailModel.find({}, function (err, docs) {
+                    UserDetailModel.find({ /*'root': {$gt: 0}*/}, function (err, docs) {
                         !err ? res.json({ data: docs, total: count, message: 'ok', statue: true }) : res.json({ message: 'error', statue: false });
                     }).skip(req.query.page - 1).limit(10);
                 }
