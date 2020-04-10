@@ -16,7 +16,7 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "mockjs": "^1.0.1-beta3",
-    "mongoose": "^5.2.10",
+    "mongoose": "^5.7.5",
     "nodemon": "^1.18.3",
     "request": "^2.88.0"
   }
