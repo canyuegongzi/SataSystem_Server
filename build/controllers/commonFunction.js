@@ -31,8 +31,8 @@ exports.makeCode = makeCode;
 function sendMessage(phone, code) {
     var SMSClient = require('@alicloud/sms-sdk');
     // ACCESS_KEY_ID/ACCESS_KEY_SECRET 根据实际申请的账号信息进行替换
-    var accessKeyId = 'LTAIXhOhVpmOA29U';
-    var secretAccessKey = 'I1wX3J2kIYcSdRtn5lihpzdj7cZ8oJ';
+    var accessKeyId = '';
+    var secretAccessKey = '';
     //初始化sms_client
     var smsClient = new SMSClient({ accessKeyId: accessKeyId, secretAccessKey: secretAccessKey });
     //发送短信
